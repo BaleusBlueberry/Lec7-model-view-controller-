@@ -22,14 +22,12 @@ public class AuthController(SignInManager<AppUser> signInManager, UserManager<Ap
             var result = await userManager.CreateAsync(user, vm.Password);
             if (result.Succeeded)
             {
+                await userManager.AddToRoleAsync(user, "User");
                 await signInManager.SignInAsync(user, true);
                 return Redirect("/");
             }
             foreach (var error in result.Errors)
             {
-                //Model state - eadd errors:
-                //Model - Database entity
-                //State - 
 
                 ModelState.AddModelError("Register Failed", error.Description);
             }
